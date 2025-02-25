@@ -1,4 +1,4 @@
-package com.exercise.uno.controller.exception;
+package com.exercise.uno.service.exception;
 
 public class EntityNotFoundException extends RuntimeException {
 

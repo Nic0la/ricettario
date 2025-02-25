@@ -1,8 +1,9 @@
 package com.exercise.uno.controller;
 
-import com.exercise.uno.modules.dto.DTOConverter;
-import com.exercise.uno.modules.dto.UserDTO;
-import com.exercise.uno.modules.entity.User;
+import com.exercise.uno.mapper.UserMapper;
+import com.exercise.uno.models.dto.DTOConverter;
+import com.exercise.uno.models.dto.UserDTO;
+import com.exercise.uno.models.entity.User;
 import com.exercise.uno.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class RegistrationController {
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
-    private DTOConverter dtoConverter;
+    UserMapper userMapper;
 
     public RegistrationController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -25,11 +26,11 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public ResponseEntity<String> registerUser(@RequestBody UserDTO userDtoReq) {
-        if(userRepository.existsByUsername(userDtoReq.getUsername())){
+    public ResponseEntity<String> registerUser(@RequestBody UserDTO userDto) {
+        if(userRepository.existsByUsername(userDto.getUsername())){
             return ResponseEntity.badRequest().body("Username already exist");
         }
-        User user = dtoConverter.DtoFromUser(userDtoReq);
+        User user = UserMapper.INSTANCE.toEntity(userDto);
         userRepository.save(user);
         return ResponseEntity.ok("User registered successfully");
     }

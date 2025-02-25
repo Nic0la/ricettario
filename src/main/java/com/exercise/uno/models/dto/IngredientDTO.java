@@ -1,4 +1,4 @@
-package com.exercise.uno.modules.dto;
+package com.exercise.uno.models.dto;
 
 public class IngredientDTO {
 

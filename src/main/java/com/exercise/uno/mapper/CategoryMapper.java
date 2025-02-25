@@ -1,7 +1,7 @@
 package com.exercise.uno.mapper;
 
-import com.exercise.uno.modules.dto.CategoryDTO;
-import com.exercise.uno.modules.entity.Category;
+import com.exercise.uno.models.dto.CategoryDTO;
+import com.exercise.uno.models.entity.Category;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 

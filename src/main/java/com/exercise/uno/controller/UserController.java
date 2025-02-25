@@ -1,15 +1,14 @@
 package com.exercise.uno.controller;
 
-import com.exercise.uno.controller.exception.EntityNotFoundException;
-import com.exercise.uno.modules.dto.DTOConverter;
-import com.exercise.uno.modules.entity.Recipe;
-import com.exercise.uno.modules.entity.User;
+import com.exercise.uno.service.exception.EntityNotFoundException;
+import com.exercise.uno.models.dto.DTOConverter;
+import com.exercise.uno.models.entity.Recipe;
+import com.exercise.uno.models.entity.User;
 import com.exercise.uno.repository.RecipeRepository;
 import com.exercise.uno.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -19,10 +18,22 @@ public class UserController {
     UserRepository userRepository;
     @Autowired
     RecipeRepository recipeRepository;
-
     @Autowired
-    DTOConverter dtoConverter;
+    private PasswordEncoder encoder;
 
+    @GetMapping
+    @RequestMapping("/login")
+    public User login(@RequestBody String username, @RequestBody String password) throws EntityNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if(user == null)
+            throw new EntityNotFoundException("User not found");
+        if(! user.getPassword().equals(encoder.encode(password)))
+            throw new EntityNotFoundException("Wrong password");
+        return user;
+    }
+
+    @PostMapping
+    @RequestMapping("/addRecipe")
     public void addRecipe(@RequestBody String recipeName, @RequestBody String username) throws EntityNotFoundException {
         User user = userRepository.findByUsername(username);
         if(user == null)

@@ -1,9 +1,9 @@
-package com.exercise.uno.controller.helper;
+package com.exercise.uno.service.helper;
 
-import com.exercise.uno.controller.exception.EntityNotFoundException;
-import com.exercise.uno.modules.dto.DTOConverter;
-import com.exercise.uno.modules.dto.RecipeDTO;
-import com.exercise.uno.modules.entity.Recipe;
+import com.exercise.uno.service.exception.EntityNotFoundException;
+import com.exercise.uno.models.dto.DTOConverter;
+import com.exercise.uno.models.dto.RecipeDTO;
+import com.exercise.uno.models.entity.Recipe;
 import com.exercise.uno.repository.RecipeRepository;
 import com.exercise.uno.mapper.CycleAvoidingMappingContext;
 import com.exercise.uno.mapper.RecipeMapper;
@@ -17,10 +17,7 @@ import java.util.Optional;
 public class ControllerHelperImp implements ControllerHelper {
 
     @Autowired
-    DTOConverter dtoConverter;
-
-    @Autowired
-    RecipeMapper RecipeMapper;
+    RecipeMapper recipeMapper;
 
     @Autowired
     RecipeRepository recipeRepository;
@@ -51,7 +48,7 @@ public class ControllerHelperImp implements ControllerHelper {
         Recipe recipe = recipeRepository.findByName(name);
         if(recipe==null)
             throw new EntityNotFoundException("No recipe with this name " +name +" was found");
-        return dtoConverter.toDto(recipe);
+        return RecipeMapper.INSTANCE.toDTO(recipe);
     }
 
     @Override

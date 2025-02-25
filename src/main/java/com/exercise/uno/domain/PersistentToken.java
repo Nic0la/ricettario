@@ -1,6 +1,6 @@
 package com.exercise.uno.domain;
 
-import com.exercise.uno.modules.entity.User;
+import com.exercise.uno.models.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 

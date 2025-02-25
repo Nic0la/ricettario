@@ -1,12 +1,11 @@
 package com.exercise.uno.controller;
 
-import com.exercise.uno.controller.helper.ControllerHelper;
-import com.exercise.uno.modules.dto.RecipeDTO;
+import com.exercise.uno.service.helper.ControllerHelper;
+import com.exercise.uno.models.dto.RecipeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +23,9 @@ public class RecipeController
 
     @GetMapping("/{id}")
     public RecipeDTO getRecipeById(@PathVariable("id") Long id){return controllerHelper.getRecipeById(id);}
+
+    @DeleteMapping("/{id}")
+    @PostAuthorize("hasRole('ADMIN')")
+    public void deleteRecipeById(@PathVariable("id") Long id){controllerHelper.deleteRecipeById(id);}
 
 }

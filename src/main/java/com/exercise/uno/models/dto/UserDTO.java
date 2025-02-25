@@ -1,7 +1,7 @@
-package com.exercise.uno.modules.dto;
+package com.exercise.uno.models.dto;
 
-import com.exercise.uno.modules.entity.Recipe;
-import com.exercise.uno.modules.entity.User;
+import com.exercise.uno.models.entity.Recipe;
+import com.exercise.uno.models.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;

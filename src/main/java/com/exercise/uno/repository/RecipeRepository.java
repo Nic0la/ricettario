@@ -1,6 +1,6 @@
 package com.exercise.uno.repository;
 
-import com.exercise.uno.modules.entity.Recipe;
+import com.exercise.uno.models.entity.Recipe;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {

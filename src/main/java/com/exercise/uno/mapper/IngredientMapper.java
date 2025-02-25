@@ -1,7 +1,7 @@
 package com.exercise.uno.mapper;
 
-import com.exercise.uno.modules.dto.IngredientDTO;
-import com.exercise.uno.modules.entity.Ingredient;
+import com.exercise.uno.models.dto.IngredientDTO;
+import com.exercise.uno.models.entity.Ingredient;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

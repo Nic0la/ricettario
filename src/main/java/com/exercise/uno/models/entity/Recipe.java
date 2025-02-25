@@ -1,4 +1,4 @@
-package com.exercise.uno.modules.entity;
+package com.exercise.uno.models.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;

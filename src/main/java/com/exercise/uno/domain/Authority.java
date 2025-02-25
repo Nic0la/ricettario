@@ -1,10 +1,8 @@
 package com.exercise.uno.domain;
 
-import com.exercise.uno.modules.entity.BaseEntity;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Persistable;
-import org.springframework.security.core.GrantedAuthority;
 
 
 import java.io.Serializable;

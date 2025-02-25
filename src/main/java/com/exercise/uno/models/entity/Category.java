@@ -1,12 +1,10 @@
-package com.exercise.uno.modules.entity;
+package com.exercise.uno.models.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 //Padre di Recipe

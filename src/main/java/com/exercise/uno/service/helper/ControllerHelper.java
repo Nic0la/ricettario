@@ -1,6 +1,6 @@
-package com.exercise.uno.controller.helper;
+package com.exercise.uno.service.helper;
 
-import com.exercise.uno.modules.dto.RecipeDTO;
+import com.exercise.uno.models.dto.RecipeDTO;
 
 import java.util.List;
 

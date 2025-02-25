@@ -1,9 +1,7 @@
-package com.exercise.uno.modules.entity;
+package com.exercise.uno.models.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,22 +15,31 @@ import java.util.List;
 @Data
 public class User implements UserDetails {
 
-    private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String username;
+
     private String password;
 
+    private String role;
 
     @OneToMany(mappedBy = "user")
     private List<Recipe> recipes = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        if(role.equals("ADMIN")){
+            return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+        if(role.equals("USER")){
+            return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+        if(role.equals("ANONYMOUS")){
+            return Arrays.asList(new SimpleGrantedAuthority("ROLE_ANONYMOUS"));
+        }
+        return Arrays.asList(new SimpleGrantedAuthority("ROLE_ANONYMOUS"));
     }
 
     @Override
@@ -86,5 +93,13 @@ public class User implements UserDetails {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
