@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/register/")
 public class RegistrationController {
+
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -34,5 +35,4 @@ public class RegistrationController {
         userRepository.save(user);
         return ResponseEntity.ok("User registered successfully");
     }
-
 }

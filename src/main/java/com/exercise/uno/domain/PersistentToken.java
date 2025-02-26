@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 
-@Entity
+//@Entity
 public class PersistentToken implements Serializable {
 
     @Id

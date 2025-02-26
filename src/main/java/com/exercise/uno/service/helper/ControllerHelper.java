@@ -1,6 +1,8 @@
 package com.exercise.uno.service.helper;
 
 import com.exercise.uno.models.dto.RecipeDTO;
+import com.exercise.uno.models.dto.UserDTO;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -13,6 +15,8 @@ public interface ControllerHelper {
 
     List<RecipeDTO> findAllRecipe();
 
-    void deleteRecipeById(Long id);
+    ResponseEntity<String> deleteRecipeById(Long id);
+
+    List<UserDTO> findAllUsers();
 
 }
