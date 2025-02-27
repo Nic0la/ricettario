@@ -1,6 +1,5 @@
-package com.exercise.uno.config;
+package com.exercise.uno.service;
 
-import com.exercise.uno.models.entity.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

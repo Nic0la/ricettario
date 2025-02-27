@@ -2,6 +2,7 @@ package com.exercise.uno.controller;
 
 import com.exercise.uno.models.entity.Recipe;
 import com.exercise.uno.models.entity.User;
+import com.exercise.uno.service.RecipeService;
 import com.exercise.uno.service.helper.ControllerHelper;
 import com.exercise.uno.models.dto.RecipeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,24 +25,61 @@ public class RecipeController
     @Autowired
     ControllerHelper controllerHelper;
 
-    @GetMapping
-    public List<RecipeDTO> getRecipes(){return controllerHelper.findAllRecipe();}
+    @Autowired
+    RecipeService recipeService;
+
+    @PostMapping
+    public ResponseEntity<?> addRecipe(@RequestBody RecipeDTO recipeDTO){
+
+        if(recipeDTO.getName() == null || recipeDTO.getName().isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        controllerHelper.addRecipe(recipeDTO);
+        return ResponseEntity.ok("Recipe added successfully");
+    }
+
+    @GetMapping("/all")
+    public List<RecipeDTO> getRecipes(){
+        return controllerHelper.findAllRecipe();
+    }
 
     @GetMapping("/{id}")
-    public RecipeDTO getRecipeById(@PathVariable("id") Long id){return controllerHelper.getRecipeById(id);}
+    public RecipeDTO getRecipeById(@PathVariable("id") Long id){
+        Optional<RecipeDTO> recipe = Optional.ofNullable(controllerHelper.findRecipeById(id));
 
-    @DeleteMapping("/delete/{id}")
+        if(recipe.isEmpty()){
+            throw new IllegalArgumentException("Recipe not found");
+
+        }else {
+            return controllerHelper.getRecipeById(id);
+        }
+    }
+
+    /**
+     * Take al recipe with the same category
+     * accept only the name of the category as param
+     * @param name
+     * @return
+     */
+    @GetMapping("/category/{name}")
+    public List<RecipeDTO> getRecipesByCategory(@PathVariable("name") String name){
+        return recipeService.findAllRecipesByCategory(name);
+    }
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRecipeById(@PathVariable("id") Long id){
         Optional<RecipeDTO> recipe = Optional.ofNullable(controllerHelper.findRecipeById(id));
+
         if(recipe.isEmpty()){
             return ResponseEntity.notFound().build();
         }
 
         RecipeDTO existingRecipe = recipe.get();
-
         controllerHelper.deleteRecipeById(id);
-        return ResponseEntity.ok("Recipe is deleted");
 
+        return ResponseEntity.ok("Recipe is deleted");
     }
+
+
 
 }

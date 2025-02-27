@@ -1,7 +1,10 @@
 package com.exercise.uno.controller;
 
+import com.exercise.uno.models.dto.RecipeDTO;
 import com.exercise.uno.models.dto.UserDTO;
 import com.exercise.uno.models.entity.LoginRequest;
+import com.exercise.uno.models.entity.RecipeRequest;
+import com.exercise.uno.service.JwtUtil;
 import com.exercise.uno.service.exception.EntityNotFoundException;
 import com.exercise.uno.models.dto.DTOConverter;
 import com.exercise.uno.models.entity.Recipe;
@@ -28,28 +31,31 @@ public class UserController {
     private PasswordEncoder encoder;
     @Autowired
     ControllerHelper ch;
+    @Autowired
+    JwtUtil jwtUtil;
 
-    @PostMapping
-    @RequestMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request) throws EntityNotFoundException {
-        User user = userRepository.findByUsername(request.getUsername());
-        if(!user.getPassword().equals(request.getPassword()))
-            throw new EntityNotFoundException("Wrong password");
-        System.out.println(user.toString());
-        return ResponseEntity.ok("Login con username: " + request.getUsername() + " " + request.getPassword());
-    }
+//    @PostMapping
+//    @RequestMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody LoginRequest request) throws EntityNotFoundException {
+//        User user = userRepository.findByUsername(request.getUsername());
+//        if(!user.getPassword().equals(request.getPassword()))
+//            throw new EntityNotFoundException("Wrong password");
+//        System.out.println(user.toString());
+//        return ResponseEntity.ok("Login con username: " + request.getUsername() + " " + request.getPassword());
+//    }
 
     @PostMapping
     @RequestMapping("/addRecipe")
-    public void addRecipe(@RequestBody String recipeName, @RequestBody String username) throws EntityNotFoundException {
-        User user = userRepository.findByUsername(username);
+    public void addRecipe(@RequestBody RecipeRequest request) throws EntityNotFoundException {
+        User user = userRepository.findByUsername(request.getUsername());
         if(user == null)
             throw new EntityNotFoundException("User not found");
-        Recipe recipe = recipeRepository.findByName(recipeName);
+        Recipe recipe = recipeRepository.findByName(request.getRecipe());
         if(recipe==null)
             throw new EntityNotFoundException("Recipe not found");
         user.getRecipes().add(recipe);
         userRepository.save(user);
+        recipeRepository.save(recipe);
     }
 
     @GetMapping

@@ -1,4 +1,4 @@
-package com.exercise.uno.models.entity;
+package com.exercise.uno.service;
 
 import java.util.List;
 

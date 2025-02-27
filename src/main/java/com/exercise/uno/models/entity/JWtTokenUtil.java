@@ -5,7 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.Date;
-
+@Deprecated
 public class JWtTokenUtil {
 
     private static final String SECRET_KEY = "secret_key";

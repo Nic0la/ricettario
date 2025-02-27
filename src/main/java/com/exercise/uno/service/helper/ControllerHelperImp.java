@@ -80,6 +80,12 @@ public class ControllerHelperImp implements ControllerHelper {
         return UserMapper.INSTANCE.toDTOList(users);
     }
 
+    @Override
+    public void addRecipe(RecipeDTO recipeDTO) {
+        recipeRepository.save(RecipeMapper.INSTANCE.toEntity(recipeDTO));
+    }
+
+
 
 
 }

@@ -19,4 +19,6 @@ public interface ControllerHelper {
 
     List<UserDTO> findAllUsers();
 
+    void addRecipe(RecipeDTO recipeDTO);
+
 }

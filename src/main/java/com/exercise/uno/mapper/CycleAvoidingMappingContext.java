@@ -2,7 +2,7 @@ package com.exercise.uno.mapper;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
-
+@Deprecated
 public class CycleAvoidingMappingContext {
 
     private Map<Object, Object>knownInstances = new IdentityHashMap<>();
