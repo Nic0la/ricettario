@@ -4,6 +4,7 @@ import com.exercise.uno.models.dto.RecipeDTO;
 import com.exercise.uno.models.dto.UserDTO;
 import com.exercise.uno.models.entity.LoginRequest;
 import com.exercise.uno.models.entity.RecipeRequest;
+import com.exercise.uno.service.AuthService;
 import com.exercise.uno.service.JwtUtil;
 import com.exercise.uno.service.exception.EntityNotFoundException;
 import com.exercise.uno.models.dto.DTOConverter;
@@ -36,6 +37,8 @@ public class UserController {
     ControllerHelper ch;
     @Autowired
     JwtUtil jwtUtil;
+    @Autowired
+    AuthService authService;
 
     @PostMapping
     @RequestMapping("/addRecipe")
@@ -64,5 +67,7 @@ public class UserController {
     @GetMapping
     @RequestMapping("/all")
     public List<UserDTO> getAllUser(){return ch.findAllUsers();}
+
+
 
 }

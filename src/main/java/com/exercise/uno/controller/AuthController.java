@@ -1,5 +1,6 @@
 package com.exercise.uno.controller;
 
+import com.exercise.uno.service.AuthService;
 import com.exercise.uno.service.JwtUtil;
 import com.exercise.uno.models.entity.LoginRequest;
 import com.exercise.uno.models.entity.User;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @Autowired
-    UserRepository userRepository;
+    AuthService authService;
 
     private final JwtUtil jwtUtil;
 
@@ -25,21 +26,22 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping()
-    public ResponseEntity<?> login(@RequestBody LoginRequest request){
-        User user = userRepository.findByUsername(request.getUsername());
-        if(!user.getPassword().equals(request.getPassword())) {
-            throw new EntityNotFoundException("Wrong password");
-        }else{
-            String token = jwtUtil.generateToken(user.getUsername());
+    @PostMapping
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request){
+        try {
+            String token = authService.login(request.getUsername(), request.getPassword());
             return ResponseEntity.ok(new AuthResponse(token));
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.badRequest().build();
         }
     }
 
     static class AuthResponse {
         public String token;
+
         public AuthResponse(String token) {
-            this.token = token;}
+            this.token = token;
+        }
     }
 
 }

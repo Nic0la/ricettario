@@ -37,7 +37,6 @@ public class RecipeService {
         return RecipeMapper.INSTANCE.toDTOList(res);
     }
 
-
     public RecipeDTO getRecipeById(Long id) {
         Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("No recipe with this id " +id +" was found"));
         return RecipeMapper.INSTANCE.toDTO(recipe);
@@ -54,7 +53,6 @@ public class RecipeService {
     }
 
     public RecipeDTO findRecipeByName(String name) throws EntityNotFoundException {
-
         Recipe recipe = recipeRepository.findByName(name);
         if(recipe==null)
             throw new EntityNotFoundException("No recipe with this name " +name +" was found");

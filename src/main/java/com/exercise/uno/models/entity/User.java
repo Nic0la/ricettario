@@ -28,6 +28,20 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Recipe> recipes = new ArrayList<>();
 
+    //Costruttore:
+    public User(){}
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(String username, String password, String role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(role.equals("ADMIN")){
@@ -61,7 +75,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 
     public String getUsername() {
         return username;

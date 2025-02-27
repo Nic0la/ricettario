@@ -67,6 +67,7 @@ public class RecipeController
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteRecipeById(@PathVariable("id") Long id){
         Optional<RecipeDTO> recipe = Optional.ofNullable(controllerHelper.findRecipeById(id));
 
