@@ -35,7 +35,7 @@ public class UserController {
     @PostMapping
     @RequestMapping("/add_recipe")
     @Transactional
-    public ResponseEntity<?> addRecipe2(@RequestBody RecipeRequest request) throws EntityNotFoundException {
+    public ResponseEntity<?> addRecipe(@RequestBody RecipeRequest request){
         try{
             userService.addRecipe(request.getUsername(), request.getRecipe());
             return ResponseEntity.ok("Recipe added successfully");

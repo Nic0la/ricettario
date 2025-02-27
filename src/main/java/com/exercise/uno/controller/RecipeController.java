@@ -3,8 +3,10 @@ package com.exercise.uno.controller;
 import com.exercise.uno.models.entity.Recipe;
 import com.exercise.uno.models.entity.User;
 import com.exercise.uno.service.RecipeService;
+import com.exercise.uno.service.exception.EntityNotFoundException;
 import com.exercise.uno.service.helper.ControllerHelper;
 import com.exercise.uno.models.dto.RecipeDTO;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,30 +30,30 @@ public class RecipeController
     @Autowired
     RecipeService recipeService;
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<?> addRecipe(@RequestBody RecipeDTO recipeDTO){
-
-        if(recipeDTO.getName() == null || recipeDTO.getName().isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
-        controllerHelper.addRecipe(recipeDTO);
-        return ResponseEntity.ok("Recipe added successfully");
+        try {
+            recipeService.saveRecipe(recipeDTO);
+            return ResponseEntity.ok("Recipe added successfully");
+        }catch (ObjectNotFoundException e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/all")
     public List<RecipeDTO> getRecipes(){
-        return controllerHelper.findAllRecipe();
+        return recipeService.findAllRecipe();
     }
 
     @GetMapping("/{id}")
-    public RecipeDTO getRecipeById(@PathVariable("id") Long id){
-        Optional<RecipeDTO> recipe = Optional.ofNullable(controllerHelper.findRecipeById(id));
-
-        if(recipe.isEmpty()){
-            throw new IllegalArgumentException("Recipe not found");
-
-        }else {
-            return controllerHelper.getRecipeById(id);
+    public ResponseEntity<RecipeDTO> getRecipeById(@PathVariable("id") Long id) {
+        try {
+            RecipeDTO recipe = recipeService.findRecipeById(id);
+            return ResponseEntity.ok(recipe);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -69,14 +71,14 @@ public class RecipeController
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteRecipeById(@PathVariable("id") Long id){
-        Optional<RecipeDTO> recipe = Optional.ofNullable(controllerHelper.findRecipeById(id));
+        Optional<RecipeDTO> recipe = Optional.ofNullable(recipeService.findRecipeById(id));
 
         if(recipe.isEmpty()){
             return ResponseEntity.notFound().build();
         }
 
         RecipeDTO existingRecipe = recipe.get();
-        controllerHelper.deleteRecipeById(id);
+        recipeService.deleteRecipeById(id);
 
         return ResponseEntity.ok("Recipe is deleted");
     }

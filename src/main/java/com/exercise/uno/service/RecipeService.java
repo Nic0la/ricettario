@@ -1,9 +1,6 @@
 package com.exercise.uno.service;
 
-import com.exercise.uno.mapper.CategoryMapper;
-import com.exercise.uno.mapper.CycleAvoidingMappingContext;
 import com.exercise.uno.mapper.RecipeMapper;
-import com.exercise.uno.models.dto.CategoryDTO;
 import com.exercise.uno.models.dto.RecipeDTO;
 import com.exercise.uno.models.entity.Category;
 import com.exercise.uno.models.entity.Recipe;
@@ -12,6 +9,7 @@ import com.exercise.uno.repository.RecipeRepository;
 import com.exercise.uno.service.exception.EntityNotFoundException;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,6 +60,33 @@ public class RecipeService {
     public List<RecipeDTO> findAllRecipe() {
         List<Recipe> recipes = recipeRepository.findAll();
         return RecipeMapper.INSTANCE.toDTOList(recipes);
+    }
+
+    public RecipeDTO addRecipe(Optional<RecipeDTO> recipeDTO) {
+        if (recipeDTO.isEmpty()) {
+            throw new ObjectNotFoundException(recipeDTO, "recipe is not correct");
+        } else {
+            recipeRepository.save(RecipeMapper.INSTANCE.toEntity(recipeDTO.get()));
+            return recipeDTO.get();
+        }
+    }
+
+    public RecipeDTO saveRecipe(RecipeDTO recipeDTO) {
+        if (recipeDTO.getName() == null) {
+            throw new ObjectNotFoundException(recipeDTO, "recipe is not correct");
+        } else {
+            recipeRepository.save(RecipeMapper.INSTANCE.toEntity(recipeDTO));
+            return recipeDTO;
+        }
+    }
+
+    public ResponseEntity<?> deleteRecipeById(Long id) {
+        try {
+            recipeRepository.deleteById(id);
+            return ResponseEntity.ok("Delete riuscito");
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("Ricetta non trovata con ID: " + id);
+        }
     }
 
 }
