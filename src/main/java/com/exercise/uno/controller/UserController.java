@@ -6,6 +6,7 @@ import com.exercise.uno.models.entity.LoginRequest;
 import com.exercise.uno.models.entity.RecipeRequest;
 import com.exercise.uno.service.AuthService;
 import com.exercise.uno.service.JwtUtil;
+import com.exercise.uno.service.UserService;
 import com.exercise.uno.service.exception.EntityNotFoundException;
 import com.exercise.uno.models.dto.DTOConverter;
 import com.exercise.uno.models.entity.Recipe;
@@ -16,6 +17,7 @@ import com.exercise.uno.service.helper.ControllerHelper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,46 +30,25 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    RecipeRepository recipeRepository;
-    @Autowired
-    private PasswordEncoder encoder;
-    @Autowired
-    ControllerHelper ch;
-    @Autowired
-    JwtUtil jwtUtil;
-    @Autowired
-    AuthService authService;
+    UserService userService;
 
     @PostMapping
-    @RequestMapping("/addRecipe")
+    @RequestMapping("/add_recipe")
     @Transactional
-    public void addRecipe(@RequestBody RecipeRequest request) throws EntityNotFoundException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated()) {
-            System.out.println("Failed");
-            throw new RuntimeException("Utente non autenticato");
+    public ResponseEntity<?> addRecipe2(@RequestBody RecipeRequest request) throws EntityNotFoundException {
+        try{
+            userService.addRecipe(request.getUsername(), request.getRecipe());
+            return ResponseEntity.ok("Recipe added successfully");
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.badRequest().body("Recipe not added");
         }
-
-        User user = userRepository.findByUsername(request.getUsername());
-        if(user == null)
-            throw new EntityNotFoundException("User not found");
-        Recipe recipe = recipeRepository.findByName(request.getRecipe());
-        if(recipe==null)
-            throw new EntityNotFoundException("Recipe not found");
-
-        recipe.setUser(user);
-        user.getRecipes().add(recipe);
-
-        userRepository.save(user);
-        recipeRepository.save(recipe);
     }
 
     @GetMapping
     @RequestMapping("/all")
-    public List<UserDTO> getAllUser(){return ch.findAllUsers();}
-
-
+    @PostAuthorize( "hasRole('ADMIN')")
+    public List<UserDTO> getAllUser(){
+        return userService.findAllUsers();
+    }
 
 }
