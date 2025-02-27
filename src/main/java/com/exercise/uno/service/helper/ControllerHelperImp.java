@@ -48,7 +48,6 @@ public class ControllerHelperImp implements ControllerHelper {
 
     @Override
     public RecipeDTO findRecipeByName(String name) throws EntityNotFoundException {
-
         Recipe recipe = recipeRepository.findByName(name);
         if(recipe==null)
             throw new EntityNotFoundException("No recipe with this name " +name +" was found");
@@ -57,7 +56,6 @@ public class ControllerHelperImp implements ControllerHelper {
 
     @Override
     public List<RecipeDTO> findAllRecipe() {
-        CycleAvoidingMappingContext context = new CycleAvoidingMappingContext();
         List<Recipe> recipes = recipeRepository.findAll();
         return RecipeMapper.INSTANCE.toDTOList(recipes);
     }

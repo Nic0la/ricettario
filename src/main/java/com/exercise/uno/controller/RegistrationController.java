@@ -5,6 +5,8 @@ import com.exercise.uno.models.dto.DTOConverter;
 import com.exercise.uno.models.dto.UserDTO;
 import com.exercise.uno.models.entity.User;
 import com.exercise.uno.repository.UserRepository;
+import com.exercise.uno.service.UserService;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +21,7 @@ public class RegistrationController {
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
-    UserMapper userMapper;
+    UserService userService;
 
     public RegistrationController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -35,4 +37,16 @@ public class RegistrationController {
         userRepository.save(user);
         return ResponseEntity.ok("User registered successfully");
     }
+
+    @PostMapping
+    @RequestMapping("/2")
+    public ResponseEntity<String> registerUser2(@RequestBody UserDTO userDto) {
+        try{
+            userService.save(userDto);
+            return ResponseEntity.ok("User registered successfully");
+        }catch (ObjectNotFoundException e){
+            return ResponseEntity.badRequest().body("Username already exist");
+        }
+    }
+
 }

@@ -27,6 +27,8 @@ public class UserDTO implements Serializable {
 
     private String password;
 
+    private String role;
+
     @JsonIgnore
     private List<Recipe> recipes;
 
@@ -36,6 +38,7 @@ public class UserDTO implements Serializable {
         this.id = user.getId();
         this.login = user.getUsername();
         this.recipes = user.getRecipes();
+        this.role = user.getRole();
     }
 
     public List<Recipe> getRecipes() {

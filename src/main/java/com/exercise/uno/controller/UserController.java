@@ -37,21 +37,10 @@ public class UserController {
     @Autowired
     JwtUtil jwtUtil;
 
-//    @PostMapping
-//    @RequestMapping("/login")
-//    public ResponseEntity<String> login(@RequestBody LoginRequest request) throws EntityNotFoundException {
-//        User user = userRepository.findByUsername(request.getUsername());
-//        if(!user.getPassword().equals(request.getPassword()))
-//            throw new EntityNotFoundException("Wrong password");
-//        System.out.println(user.toString());
-//        return ResponseEntity.ok("Login con username: " + request.getUsername() + " " + request.getPassword());
-//    }
-
     @PostMapping
     @RequestMapping("/addRecipe")
     @Transactional
     public void addRecipe(@RequestBody RecipeRequest request) throws EntityNotFoundException {
-
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated()) {
             System.out.println("Failed");
